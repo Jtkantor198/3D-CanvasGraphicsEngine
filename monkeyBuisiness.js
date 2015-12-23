@@ -1488,11 +1488,13 @@ meshInstances = [2,0,0,-Math.PI/2,0,Math.PI/2,0];
 var world = new World(meshInstances, meshList);
 //set meshposition to [2, 0, 0];
 //set meshdirection to [0,0,0];
-var cameraPosition = [0,0,0];
-var cameraDirection = [1,0,0];
+var cameraPosition = [0,-1.5,0];
+var angle = Math.PI/4;
+var cameraDirection = [Math.sin(angle),Math.cos(angle),0];
 var cameraUp = [0,0,1];
 var canvas = document.getElementById('canvas');
 var context = canvas.getContext('2d');
+context.translate(context.canvas.clientWidth/2, context.canvas.clientHeight/2);
 var theta = 0;
 world.render(cameraPosition, cameraDirection, cameraUp, 1, 1, context);
 
@@ -1507,6 +1509,44 @@ world.render(cameraPosition, cameraDirection, cameraUp, 1, 1, context);
 setInterval(renderRotate,1000/5);*/
 //render window 2 by 2 at [0,0,0] in direction [1,0,0]
 //at 1/60 s intervals slowly turn around monkey [2, 0, 0] + 2[Math.cos(theta), Math.sin(theta), 0];
+var keydown = false;
+document.body.onkeydown = function(keyevent){
+	keyevent.preventDefault();
+	var keydown = true;
+	//Left
+	if (keyevent.keyCode == 37){
+		//cameraPosition[1] = cameraPosition[1] - 0.01;
+		angle += 0.01;
+		cameraDirection[0] = Math.sin(angle);
+		cameraDirection[1] = Math.cos(angle);
+	}
+	//Up
+	if (keyevent.keyCode == 38){
+		//
+		cameraPosition[0] = cameraPosition[0] + 0.1*cameraDirection[0];
+		cameraPosition[1] = cameraPosition[1] + 0.1*cameraDirection[1];
+		cameraPosition[2] = cameraPosition[2] + 0.1*cameraDirection[2];
+	}
+	//Right
+	if (keyevent.keyCode == 39){
+		//cameraPosition[1] = cameraPosition[1] + 0.01;
+		angle -= 0.01;
+		cameraDirection[0] = Math.sin(angle);
+		cameraDirection[1] = Math.cos(angle);
+	}
+	//Down
+	if (keyevent.keyCode == 40){
+		cameraPosition[0] = cameraPosition[0] - 0.1*cameraDirection[0];
+		cameraPosition[1] = cameraPosition[1] - 0.1*cameraDirection[1];
+		cameraPosition[2] = cameraPosition[2] - 0.1*cameraDirection[2];
+	}
+	context.clearRect(-canvas.width/2, -canvas.height/2, canvas.width, canvas.height);
+	world.render(cameraPosition, cameraDirection, cameraUp, 1, 1, context);
+};
 
-
+document.body.onkeyup = function(keyevent){
+	if (keyevent.keyCode > 36 && keyevent.keyCode < 41){
+		keydown = false;
+	}
+};
 

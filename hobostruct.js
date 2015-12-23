@@ -1,21 +1,21 @@
 
 //---------------------------------------------------------------------------
-//-------------------Section 1: Defines Buffer Objects-----------------------
-//---------------------------------------------------------------------------\
-//Objective: Defines buffer objects to contain either Float or Int 32 bit values
-//in typed fixed length arrays. These are used as containers for faces and vertices
-//for an effciency boost over untyped arrays. The objects keep track of the size  
-//(number of 32 bit values stored) which is utilized by later algorithms.
-//
-//--------------------------------------------------------------------------------
-//---- Object   : BufferPrototype
-//---- Objective: To catch only one copy of methods shared by buffer objects.
-//---- Members:     |->push(32bitValue)
-//----              |->pop()
-//----              |->clear()
-//--------------------------------------------------------------------------------
+//-------------------SECTION 1: DEFINES BUFFER OBJECTS-----------------------
+//---------------------------------------------------------------------------
+    //Objective: Defines buffer objects to contain either Float or Int 32 bit values
+    //in typed fixed length arrays. These are used as containers for faces and vertices
+    //for an effciency boost over untyped arrays. The objects keep track of the size  
+    //(number of 32 bit values stored) which is utilized by later algorithms.
+    //
+    //-------------------------------------------------------------------------------
+    //---- Object   : BufferPrototype
+    //---- Objective: To catch only one copy of methods shared by buffer objects.
+    //---- Members:     |->push(32bitValue)
+    //----              |->pop()
+    //----              |->clear()
+    //-------------------------------------------------------------------------------
 
-function BufferPrototype() {
+ function BufferPrototype() {
     //push(32bitValue): Appends element on top of array.
     this.push = function(my32bitvalue) {
         this.size++;
@@ -51,14 +51,14 @@ function BufferPrototype() {
     }
 };
 
-//--------------------------------------------------------------------------------
-//---- Object   : Buffer
-//---- Objective: To store typed arrays and keep track of their size (number of filled
-//                slots).
-//---- Members:     |->push(32bitValue)
-//----              |->pop()
-//----              |->clear()
-//--------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------------
+    //---- Object   : Buffer
+    //---- Objective: To store typed arrays and keep track of their size (number of filled
+    //                slots).
+    //---- Members:     |->push(32bitValue)
+    //----              |->pop()
+    //----              |->clear()
+    //--------------------------------------------------------------------------------
 function Buffer(type,size) {
     if (type == 'Uint32'){
         this.array= new Uint32Array(size);
@@ -80,25 +80,12 @@ function Buffer(type,size) {
 Buffer.prototype = new BufferPrototype(); //THIS **SHOULD** WORK
 
 //---------------------------------------------------------------------------
-//---------------------Section 2: Defines Math Objects-----------------------
+//---------------------SECTION 2: DEFINES MATH OBJECTS-----------------------
 //---------------------------------------------------------------------------
-//Objective: Provide quick sort implementation for sorting faces within a large continuous Int32Array by each face's closest vertex,
-//which are themselves in a large continuous Float32Array
-//
-var HoboMath = function(){
-    //Input -- [a1,a2,a3]<cross>[b1,b2,b3]
-    this.cross = function(a,b,arrayptr,arrayind) {
-        //arrayind = typeof arrayind == 'undefined' ? 0 : arrayind;
-        arrayptr[arrayind]=a[1]*b[2]-a[2]*b[1];
-        arrayptr[arrayind+1]=a[2]*b[0]-a[0]*b[2];
-        arrayptr[arrayind+2]=a[0]*b[1]-a[1]*b[0];
-    }
-    
-    //Input -- [a1,a2,a3]<dot>[b1,b2,b3]
-    this.dot = function(a,b) {
-        return a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
-    }
-    
+    //Objective: Provide quick sort implementation for sorting faces within a large continuous Int32Array by each face's closest vertex,
+    //which are themselves in a large continuous Float32Array
+    //
+var HoboMath = function(){    
     this.painsort = function(faces, vertices, tempbuffer) {
         //Calculate the max z values for each face before we do quicksort
         for (var i=0; i<faces.size; i+=4) {
@@ -472,7 +459,6 @@ function World(meshInstances, meshList){
         //Draw to canvas
         var pixelWidth = context.canvas.clientWidth;
         var pixelHeight = context.canvas.clientHeight;
-        context.translate(pixelWidth/2, pixelHeight/2);
         for (var i=0;i<renderFaces.size;i+=4){
             //context.lineWidth=3;    //LARGE LINES
             context.beginPath();
